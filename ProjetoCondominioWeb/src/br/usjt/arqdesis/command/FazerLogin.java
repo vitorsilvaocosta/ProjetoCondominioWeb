@@ -27,7 +27,7 @@ public class FazerLogin implements Command {
 		if(service.validar(usuario)){
 			HttpSession session = request.getSession();
 			session.setAttribute("logado", usuario);
-			System.out.println("Logou "+usuario.getUsername());
+			System.out.println("Logou ["+usuario.getUsername() +"]");
 		} else {
 			System.out.println("Não Logou "+usuario);
 			throw new ServletException("Usuário/Senha inválidos");

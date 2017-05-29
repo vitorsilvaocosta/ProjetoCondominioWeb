@@ -21,3 +21,5 @@ horarioEmpresa VARCHAR(200),
 temperaturaAr DECIMAL(4,2),
 horarioAr VARCHAR(200)
 );
+
+select * from user;
