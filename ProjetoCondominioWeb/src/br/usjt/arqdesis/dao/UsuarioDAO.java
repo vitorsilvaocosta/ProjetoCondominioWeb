@@ -1,5 +1,6 @@
 package br.usjt.arqdesis.dao;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,11 +11,8 @@ import java.util.List;
 import br.usjt.arqdesis.dao.ConnectionFactory;
 import br.usjt.arqdesis.model.Usuario;
 
-
-
 public class UsuarioDAO {
 
-	
 	//
 	public int criar(Usuario usuario) {
 		String sqlInsert = "INSERT INTO user(cpf, nome, email, telefone, empresa, login, senha) VALUES (?, ?, ?, ?, ? ,? ,?)";
@@ -176,6 +174,7 @@ public class UsuarioDAO {
 		List<Usuario> lista = new ArrayList<Usuario>();
 		
 		String sqlSelect = "SELECT nome, cpf, email, telefone, empresa, login, senha FROM user;";
+		
 		// usando o try with resources do Java 7, que fecha o que abriu
 		try (Connection conn = ConnectionFactory.obtemConexao();
 				PreparedStatement stm = conn.prepareStatement(sqlSelect);) {
@@ -232,5 +231,71 @@ public class UsuarioDAO {
 			e2.printStackTrace();
 		}
 		return false;
+	}
+	
+	///arraylist
+	public ArrayList<Usuario> listarUsuarios() throws IOException {
+		Usuario to;
+		ArrayList<Usuario> lista = new ArrayList<>();
+		String sqlSelect = "SELECT id, nome, cpf, email, telefone, empresa, login, senha FROM user";
+
+		// usando o try with resources do Java 7, que fecha o que abriu
+		try (Connection conn = ConnectionFactory.obtemConexao();
+				PreparedStatement stm = conn.prepareStatement(sqlSelect);) {
+			try (ResultSet rs = stm.executeQuery();) {
+				while(rs.next()) {
+					to = new Usuario();
+					to.setId(rs.getInt("id"));
+					to.setNome(rs.getString("nome"));
+					to.setCpf(rs.getString("cpf"));
+					to.setEmail(rs.getString("email"));
+					to.setTelefone(rs.getString("telefone"));
+					to.setEmpresa(rs.getString("empresa"));
+					to.setUsername(rs.getString("login"));
+					to.setPassword(rs.getString("senha"));
+					lista.add(to);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new IOException(e);
+			}
+		} catch (SQLException e1) {
+			System.out.print(e1.getStackTrace());
+			throw new IOException(e1);
+		}
+		return lista;
+	}
+	
+	public ArrayList<Usuario> listarUsuarios(String chave) throws IOException {
+		Usuario to;
+		ArrayList<Usuario> lista = new ArrayList<>();
+		String sqlSelect = "SELECT id, nome, cpf, email, telefone, empresa, login, senha FROM user where upper(nome) like ?";
+
+		// usando o try with resources do Java 7, que fecha o que abriu
+		try (Connection conn = ConnectionFactory.obtemConexao();
+				PreparedStatement stm = conn.prepareStatement(sqlSelect);) {
+				stm.setString(1, "%" + chave.toUpperCase() + "%");
+			try (ResultSet rs = stm.executeQuery();) {
+				while(rs.next()) {
+					to = new Usuario();
+					to.setId(rs.getInt("id"));
+					to.setNome(rs.getString("nome"));
+					to.setCpf(rs.getString("cpf"));
+					to.setEmail(rs.getString("email"));
+					to.setTelefone(rs.getString("telefone"));
+					to.setEmpresa(rs.getString("empresa"));
+					to.setUsername(rs.getString("login"));
+					to.setPassword(rs.getString("senha"));
+					lista.add(to);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new IOException(e);
+			}
+		} catch (SQLException e1) {
+			System.out.print(e1.getStackTrace());
+			throw new IOException(e1);
+		}
+		return lista;
 	}
 }

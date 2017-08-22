@@ -1,5 +1,7 @@
 package br.usjt.arqdesis.service;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import br.usjt.arqdesis.dao.UsuarioDAO;
@@ -9,22 +11,22 @@ public class UsuarioService {
 
 	UsuarioDAO dao = new UsuarioDAO();
 	
-	public int criar(Usuario usuario){
+	public int criar(Usuario usuario) throws IOException{
 		return dao.criar(usuario);
 	}
-	public void atualizar(Usuario usuario){
+	public void atualizar(Usuario usuario) throws IOException{
 		dao.atualizar(usuario);
 	}
 	public void atualizarPorCpf(Usuario usuario){
 		dao.atualizarPorCpf(usuario);
 	}
-	public void excluir(int id){
+	public void excluir(int id) throws IOException{
 		dao.excluir(id);
 	}
 	public void excluirPorCpf(String cpf){
 		dao.excluirPorCpf(cpf);
 	}
-	public Usuario carregar(int id){
+	public Usuario carregar(int id) throws IOException{
 		return dao.carregar(id);
 	}
 	public Usuario carregarPorCpf(String cpf){
@@ -36,4 +38,12 @@ public class UsuarioService {
 	public boolean validar(Usuario usuario){
 		return dao.validar(usuario);
 	}
+	
+	public ArrayList<Usuario> listarUsuarios() throws IOException{
+		return dao.listarUsuarios();
+	}
+	public ArrayList<Usuario> listarUsuarios(String chave) throws IOException{
+		return dao.listarUsuarios(chave);
+	}
+	
 }
