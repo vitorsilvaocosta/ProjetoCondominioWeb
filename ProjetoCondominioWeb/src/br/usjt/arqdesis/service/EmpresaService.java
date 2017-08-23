@@ -2,6 +2,7 @@ package br.usjt.arqdesis.service;
 
 import br.usjt.arqdesis.model.Empresa;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,10 +37,10 @@ public class EmpresaService {
 	public List<Empresa> carregarTodasEmpresas(){
 		return dao.carregarTodasEmpresas();
 	}
-	public ArrayList<Empresa> listarEmpresas(){
+	public ArrayList<Empresa> listarEmpresas() throws IOException{
 		return dao.listarEmpresas();
 	}
-	public ArrayList<Empresa> listarEmpresas(String chave){
+	public ArrayList<Empresa> listarEmpresas(String chave) throws IOException{
 		return dao.listarEmpresas(chave);
 	}
 }

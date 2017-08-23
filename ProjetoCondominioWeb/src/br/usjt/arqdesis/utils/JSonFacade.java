@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 
 import br.usjt.arqdesis.model.Usuario;
+import br.usjt.arqdesis.model.Empresa;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -82,7 +83,7 @@ public class JSonFacade {
 		JSONObject object = new JSONObject();
 		try {
 			object.put("id", usuario.getId());
-			object.put("cpf", usuario.getId());
+			object.put("cpf", usuario.getCpf());
 			object.put("nome", usuario.getNome());
 			object.put("email", usuario.getEmail());
 			object.put("telefone", usuario.getTelefone());
@@ -100,6 +101,67 @@ public class JSonFacade {
 		try {
 			object.put("error", e.toString());
 		} catch (JSONException e1) {
+			e.printStackTrace();
+		}
+		return object.toString();
+	}
+	
+	
+	//JSON para Empresa
+	public static String listToJSonEmpresa(ArrayList<Empresa> lista) {
+		JSONArray vetor = new JSONArray();
+		for (Empresa to : lista) {
+			JSONObject object = new JSONObject();
+			try {
+				object.put("id", to.getId());
+				object.put("cnpj", to.getCnpj());
+				object.put("razaoSocial", to.getRazaoSocial());
+				object.put("horarioEmpresa", to.getHorarioEmpresa());
+				object.put("temperaturaAr", to.getTemperaturaArCondicionado());
+				object.put("horarioAr", to.getHorarioArCondicionado());
+				vetor.put(object);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+		return vetor.toString();
+	}
+	public static Empresa jSonToEmpresa(String json) throws IOException{
+		try{
+			JSONObject registro = new JSONObject(json);
+			int id = registro.getInt("id");
+			String cnpj = registro.getString("cnpj");
+			String razaoSocial = registro.getString("razaoSocial");
+			String horarioEmpresa = registro.getString("horarioEmpresa");
+			double temperaturaAr = registro.getDouble("temperaturaAr");
+			String horarioAr = registro.getString("horarioAr");
+
+			Empresa empresa = new Empresa();
+			empresa.setId(id);
+			empresa.setCnpj(cnpj);
+			empresa.setRazaoSocial(razaoSocial);
+			empresa.setHorarioEmpresa(horarioEmpresa);
+			empresa.setTemperaturaArCondicionado(temperaturaAr);
+			empresa.setHorarioArCondicionado(horarioAr);
+		
+
+			return empresa;
+		} catch(JSONException jsone){
+			jsone.printStackTrace();
+			throw new IOException(jsone);
+		}
+	}
+	
+	public static String EmpresaToJSon(Empresa empresa) throws IOException {
+		JSONObject object = new JSONObject();
+		try {
+			object.put("id", empresa.getId());
+			object.put("cnpj", empresa.getCnpj());
+			object.put("razaoSocial", empresa.getRazaoSocial());
+			object.put("horarioEmpresa", empresa.getHorarioEmpresa());
+			object.put("temperaturaAr", empresa.getTemperaturaArCondicionado());
+			object.put("horarioAr", empresa.getHorarioArCondicionado());
+		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 		return object.toString();
